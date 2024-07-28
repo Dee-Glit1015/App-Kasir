@@ -1,25 +1,38 @@
+# import mysql.connector 
+
+# db = mysql.connector.connect(
+#     host='localhost',
+#     user='root',
+#     password='',
+#     db='db_restoran',
+# )
+# if db.is_connected():
+#     print("Berhasil terhubung ke database")
+
 import pymysql
 
-connection = pymysql.connect(
+connection = pymysql.connect (
     host='localhost',
     user='root',
     password='',
     db='db_restoran',
 )
 
-print("====INPUT DATA KATEGORI MAKANAN====")
-kd_kategori = input ("Kd Kategori :")
-kategori = input ("Kategori :")
-
 try:
-    with connection.cursor() as cursor :
-        sql = "INSERT INTO tb_kategori VALUES (%s, %s)"
-        try :
-            cursor.execute(sql, (kd_kategori,kategori))
-            print ("Berhasil")
-        except:
-            print ("Gagal")
+    with connection.cursor () as cursor:
+        sql = "SELECT kd_kategori, kategori, 'desc' FROM tb_kategori"
+        try:
+            cursor.execute (sql)
+            result = cursor.fetchall ()
 
-        connection.commit()
+            print ("Kode Kategori\t\t\tKategori")
+            print ("----------------------------------------------------------")
+            for row in result:
+                print (str (row[0]) + "\t\t\t\t" + row[1] )
+
+        except:
+            print ("Oops! Something wrong")
+
+    connection.commit ()
 finally:
-    connection.close()
+    connection.close ()
